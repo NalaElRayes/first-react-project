@@ -4,6 +4,41 @@ import PropTypes from 'prop-types'
 
 
 class Counter extends Component {
+
+    constructor() {
+        super(); //error has to call the super()
+
+        this.state = {
+            counter: 0
+
+        }
+        this.increment = this.increment.bind(this);
+    }
+
+    render() {
+        return (
+            <div className="counter">
+                <CounterButton by={1} incrementMethod={this.increment}></CounterButton>
+                <CounterButton by={5} incrementMethod={this.increment}></CounterButton>
+                <CounterButton by={10} incrementMethod={this.increment}></CounterButton>
+                <span className="count">{this.state.counter}</span>
+            </div >
+        );
+    }
+
+    increment(by) {
+        // console.log(`increment from child - ${by}`)
+        this.setState(
+            (prevState) => {
+                return { counter: this.state.counter + by }
+
+            }
+        );
+
+    }
+}
+
+class CounterButton extends Component {
     //define the initial state in a constructur
     // state => counter 0
     constructor() {
@@ -19,12 +54,9 @@ class Counter extends Component {
 
     render() {
 
-
         return (
-            <div className="counter" >
+            <div className="counterButton" >
                 <button onClick={this.increment} > +{this.props.by} </button>
-                <span className="count">{this.state.counter}</span>
-
             </div >
         );
     }
@@ -34,17 +66,17 @@ class Counter extends Component {
         this.setState({
             counter: this.state.counter + this.props.by
 
-        }
+        });
 
-        );
+        this.props.incrementMethod(this.props.by);
     }
 }
 
-Counter.defaultProps = {
+CounterButton.defaultProps = {
     by: 1
 }
 
-Counter.propTypes = {
+CounterButton.propTypes = {
     by: PropTypes.number
 }
 
